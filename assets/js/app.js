@@ -3,35 +3,29 @@ function init() {
     let boundry = document.getElementById("bgGraphics");
     h = boundry.offsetHeight;
     w = boundry.offsetWidth;
+    randomCycle();
     clearInterval(interval);
-    interval = setInterval(randomCycle, 6000)
+    interval = setInterval(randomCycle, 6000);
 };
 
 function randomCycle() {
-    let graphics = document.querySelectorAll(".graphic"),
-        xpositions = Array.from({length: 6}, () => Math.floor(Math.random() * w));
-
-        console.log(xpositions)
+    let graphics = document.querySelectorAll(".graphic");
 
        
     graphics.forEach((graphic, index) => {
         setTimeout(()=>{
             let gh = graphic.offsetHeight,
-                gw = graphic.offsetWidth,
-                xpos =  Math.round(Math.random() * w - gw / 2) ;
-                ypos = Math.round(Math.random() * h - gh / 2) ;
+                gw = graphic.offsetWidth;
 
-                console.log(index);
-            
-            graphic.style.left = xpos + "px";
-            graphic.style.top = ypos + "px";
+            graphic.style.left = Math.floor(Math.random() * w)  - gw /2 + "px";
+            graphic.style.top = Math.floor(Math.random() * h) - gh /2 + "px";
+            graphic.style.opacity = Math.floor(Math.random() * 2);
 
         }, index * 1000)
         
     })
 
 };
-randomCycle();
 init();
 
 let timeOut;
