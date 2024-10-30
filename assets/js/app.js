@@ -3,7 +3,6 @@ function init() {
     let boundry = document.getElementById("bgGraphics");
     h = boundry.offsetHeight;
     w = boundry.offsetWidth;
-    randomCycle();
     clearInterval(interval);
     interval = setInterval(randomCycle, 6000);
 };
@@ -26,6 +25,7 @@ function randomCycle() {
     })
 
 };
+randomCycle();
 init();
 
 let timeOut;
