@@ -117,11 +117,13 @@ h1 {
 }
 
 
-.info > :nth-child(2){
+.info > :nth-child(1){
     grid-column: span 2;
 }
 
 .section__text#projects {
+    overflow-y: hidden;
+    height: fit-content;
     justify-self: end;
     align-self: end;
 }
@@ -133,20 +135,19 @@ h1 {
 }
 
 .project {
+    position: relative;
     display: grid;
     grid-column: span 3;
     grid-template-columns: subgrid;
-    opacity: 0.4;
-    transition: 1000ms;
 }
 
 .project > p {
-    transition: 1000ms;
+    opacity: 0.4;
+    transition: all 200ms;
 }
 
-.highlight {
-    height: fit-content;
-    position: relative;
+
+.highlight > p{
     opacity: 1;
 }
 
@@ -162,10 +163,5 @@ h1 {
     width: 100%;
     background-color: white;
     grid-column: 1 / 3;
-    opacity: 0;
-    transition: 1000ms;
-}
-
-.highlight .bar {
-    opacity: 1;
+    grid-row: 1;
 }
