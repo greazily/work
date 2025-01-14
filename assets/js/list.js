@@ -1,82 +1,84 @@
-
-// setInterval(removeProject, 3000)
-
-// function removeProject() {
-//     let projectList = document.querySelector("#projects"),
-//         projects = document.querySelectorAll(".project"),
-//         firstproject = projects[0];
-//     projectList.removeChild(firstproject);
-//     projectList.appendChild(firstproject);
-//     console.log(projectList, projects);
-// }
-
-// let projectList = document.querySelectorAll(".project");
-// let i = 1;
-
-// setInterval(highlighter, 1000)
-
-// function highlighter() {
-//             if(i !== projectList.length) {
-//                 if(i !== 0) {
-//                     projectList[i-1].classList.toggle("highlight");
-//                 }
-//                 projectList[i].classList.toggle("highlight");
-//                 i += 1;
-//             } else {
-//                 projectList[projectList.length - 1].classList.toggle("highlight");
-//                 projectList[0].classList.toggle("highlight");
-//                 i = 1;
-//             }
-    
-// }
-
-// let projects = document.querySelectorAll(".project"),
-//     projectsAmount = projects.length * 4,
-//     projectsHeight = document.querySelector("#projects").offsetHeight + 13;
-
-// console.log(projectsAmount, projectsHeight);
-
-// gsap.to("#bar_moving", {y: projectsHeight, duration: projectsAmount, repeat: -1, ease: "none"});
-
-
-
-
-// ////////////////////////////////////////////////////////////////////////
-
-// gsap.registerPlugin(Flip);
-
-// let bar = document.getElementById("bar_moving"),
-//     props = "gridRow";
-
-// const state = Flip.getState(bar, props);
-
-// // bar.style.gridRow = "2";
-
-// FLip.from(state, {duration: 2, ease: "power1.inOut", absolute: true});
-
-///////////////////////////////////////////////////////////////////////////
-
 gsap.registerPlugin(Flip);
-let projects = document.querySelectorAll(".project");
-
-let bar = document.getElementById("bar_moving"),
+let projects = document.querySelectorAll(".project"),
+    previews = document.querySelectorAll(".preview__clip"),
+    bar = document.getElementById("bar_moving"),
     index = 0;
+    loop = setInterval(descend, 3000),
+    hovering = false;
 
-setInterval(descend, 3000);
 
-function descend(){
-const state = Flip.getState(bar);
-    projects[index].classList.toggle("highlight");
-    if(index < projects.length -1) {
-        projects[index+1].prepend(bar);
-        index += 1;
+function descend(h){
+    let hactive = h;
+    projects.forEach(project => {
+        project.classList.remove("highlight");
+    });
+
+    const state = Flip.getState(bar);
+    if(hovering === true){
+            projects[hactive].prepend(bar);
+            index = Number(hactive);
     } else {
-        index = 0;
-        projects[index].prepend(bar);
+        if(index < projects.length -1) {
+            index += 1;
+            projects[index].prepend(bar);
+        } else {
+            index = 0;
+            projects[index].prepend(bar);
+        };
+    };
+    Flip.from(state, {
+        duration: 0.5, 
+        ease: "power1.inOut", 
+        onComplete: ()=> {previewChanger(index)}
+    });
+    if(projects[index].contains(bar)){
+        projects[index].classList.add("highlight");
+    };
+};
+
+projects.forEach(project => {
+    project.addEventListener("mouseover", ()=>{
+        hovering = true;
+        hoverCheck();
+        descend(project.id);
+    });
+    project.addEventListener("mouseleave", ()=>{
+        hovering = false;
+        loop = setInterval(descend, 3000);
+        hoverCheck();
+    });
+});
+
+function hoverCheck(){
+    if (hovering === false){
+        loop;
+    } else {
+        clearInterval(loop)
     }
-Flip.from(state, {duration: 1, ease: "power1.inOut", onComplete: ()=> {
-    projects[index].classList.toggle("highlight");
-}})
+};
 
+function indexer(arr){
+    for (let i = 0; i < arr.length; i++) {
+        arr[i].id = i;
+    };
+};
 
+function previewChanger(index) {
+        previews.forEach(clip => {
+            clip.classList.remove("show");
+        });
+        previews[Number(index)].classList.add("show");
 }
+
+function barGrow(){
+    gsap.to(".bar",{
+        duration: 0.3,
+        scaleX:0.1
+    });
+}
+function barShrink(){
+    
+}
+
+indexer(projects);
+// indexer(previews);
