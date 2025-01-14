@@ -7,16 +7,12 @@ let projects = document.querySelectorAll(".project"),
     hovering = false;
 
 
-function descend(h){
-    let hactive = h;
-    projects.forEach(project => {
-        project.classList.remove("highlight");
-    });
 
+
+function listing(){
     const state = Flip.getState(bar);
     if(hovering === true){
-            projects[hactive].prepend(bar);
-            index = Number(hactive);
+            projects[index].prepend(bar);
     } else {
         if(index < projects.length -1) {
             index += 1;
@@ -26,28 +22,38 @@ function descend(h){
             projects[index].prepend(bar);
         };
     };
-    Flip.from(state, {
+   const flip = Flip.from(state, {
         duration: 0.5, 
         ease: "power1.inOut", 
-        onComplete: ()=> {previewChanger(index)}
+        onComplete: ()=> {
+            previewChanger(index);
+        }
     });
     if(projects[index].contains(bar)){
         projects[index].classList.add("highlight");
     };
+
+    return flip;
 };
 
-projects.forEach(project => {
-    project.addEventListener("mouseover", ()=>{
-        hovering = true;
-        hoverCheck();
-        descend(project.id);
+function shrinkGrow(){
+    const state = Flip.getState(bar);
+    bar.classList.toggle("shrink");
+    const flip = Flip.from(state, {
+        duration: 0.3, 
+        ease: "power1.inOut"
     });
-    project.addEventListener("mouseleave", ()=>{
-        hovering = false;
-        loop = setInterval(descend, 3000);
-        hoverCheck();
-    });
-});
+
+    return flip;
+};
+
+function masterTL() {
+    tl = gsap.timeline()
+
+    tl.call(()=> shrinkGrow())
+    tl.call(()=> listing())
+    tl.call(()=> shrinkGrow())
+  };
 
 function hoverCheck(){
     if (hovering === false){
@@ -70,15 +76,36 @@ function previewChanger(index) {
         previews[Number(index)].classList.add("show");
 }
 
-function barGrow(){
-    gsap.to(".bar",{
-        duration: 0.3,
-        scaleX:0.1
+function descend(){
+    console.log(hovering);
+    projects.forEach(project => {
+        project.classList.remove("highlight");
     });
-}
-function barShrink(){
-    
-}
 
-indexer(projects);
+    masterTL();
+};
+
+function listener() {
+    projects.forEach(project => {
+        project.addEventListener("mouseover", ()=>{
+            hovering = true;
+            hoverCheck();
+            setTimeout(()=>{
+                index = Number(project.id);
+                descend();
+            }, 1000)
+        });
+        project.addEventListener("mouseleave", ()=>{
+            hovering = false;
+            loop = setInterval(descend, 3000);
+            hoverCheck();
+        });
+    });
+};
+
+function init(){
+    indexer(projects);
+    listener(projects);
+}
+init()
 // indexer(previews);

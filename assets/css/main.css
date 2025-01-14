@@ -189,3 +189,7 @@ h1 {
     grid-row: 1;
     background-color: red;
 }
+
+.shrink {
+    grid-column: 1 / 2;
+}

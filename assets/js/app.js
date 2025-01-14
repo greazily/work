@@ -3,14 +3,14 @@ function init() {
     let boundry = document.querySelector(".background__graphics");
     h = boundry.offsetHeight;
     w = boundry.offsetWidth;
-    console.log(w, h);
+    // console.log(w, h);
     clearInterval(interval);
     interval = setInterval(randomCycle, 6000);
 };
 
 function randomCycle() {
     let graphics = document.querySelectorAll(".graphic__element");
-    console.log(graphics);
+    // console.log(graphics);
 
        
     graphics.forEach((graphic, index) => {
