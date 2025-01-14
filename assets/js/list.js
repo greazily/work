@@ -38,7 +38,6 @@ function descend(h){
 
 projects.forEach(project => {
     project.addEventListener("mouseover", ()=>{
-        setTimeout()
         hovering = true;
         hoverCheck();
         descend(project.id);
@@ -71,15 +70,6 @@ function previewChanger(index) {
         previews[Number(index)].classList.add("show");
 }
 
-function barGrow(){
-    gsap.to(".bar",{
-        duration: 0.3,
-        scaleX:0.1
-    });
-}
-function barShrink(){
-    
-}
 
 indexer(projects);
 // indexer(previews);
