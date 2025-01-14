@@ -38,6 +38,7 @@ function descend(h){
 
 projects.forEach(project => {
     project.addEventListener("mouseover", ()=>{
+        setTimeout()
         hovering = true;
         hoverCheck();
         descend(project.id);
